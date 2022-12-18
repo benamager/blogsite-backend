@@ -8,6 +8,14 @@ const UserSchema = new Schema({
     type: String,
     required: [true, "Must provide username"],
   },
+  displayName: {
+    type: String,
+    required: [true, "Must provide display name"],
+  },
+  email: {
+    type: String,
+    required: [true, "Must provide email"],
+  },
   password: {
     type: String,
     required: [true, "Must provide password"],
@@ -16,6 +24,9 @@ const UserSchema = new Schema({
     type: String,
     enum: ["default", "mod", "admin"], // possible values
     default: "default", // default value
+  },
+  lastActive: {
+    type: Date,
   }
 });
 
