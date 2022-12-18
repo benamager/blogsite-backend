@@ -7,6 +7,7 @@ const addUrlToBlog = (blog) => {
   return { ...blog._doc, url: `${process.env.SITE_URL}/api/v1/blogs/${blog._id}` }
 }
 
+// get all blogs
 async function getBlogs(req, res) {
   const { id } = req.params; // for single book
 
@@ -59,13 +60,14 @@ async function getBlogs(req, res) {
       .skip(skip)
       .limit(limit)
       .sort(sortForMongoose)
-      .populate({ path: "author", select: "-createdAt -password" }) // populate author field with user object + exclude things
-    // if no blogs found
+      .populate({ path: "author", select: "-createdAt -password -_id" }) // populate author field with user object + exclude things
 
+    // if no blogs found
     if (blogs.length < 1) {
       res.status(404).json({ message: "No blogs found..." })
       return
     }
+
     // return object
     res.send({
       count: countBlogs,
@@ -73,11 +75,12 @@ async function getBlogs(req, res) {
       next: skip + limit >= countBlogs ? null : `${process.env.SITE_URL}/api/v1/blogs?limit=${limit}&skip=${skip + limit}&sort=${sort}`,
       previous: skip === 0 ? null : `${process.env.SITE_URL}/api/v1/blogs?limit=${limit}&skip=${skip - limit > 0 ? 0 : skip - limit}&sort=${sort}`,
       blogs: blogs.map(blog => addUrlToBlog(blog)) // blogs
-    });
-    res.end();
+    })
+      .end();
   } catch (error) {
     console.log("get blogs error", error)
     res.status(500).json({ message: "Database error while getting multiple blogs." })
+      .end()
   }
 }
 

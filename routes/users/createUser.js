@@ -6,23 +6,22 @@ async function createUser(req, res) {
 
   // user & pass is provided
   if (!username || !password) {
-    res.status(400).json({ message: "Both username and password should be provided." });
-    res.end();
+    res.status(400).json({ message: "Both username and password should be provided." })
+      .end();
     return;
   }
 
   // username is not used
   const isUsernameUsed = await User.findOne({ username: username });
-
   if (isUsernameUsed) {
     res.status(403).json({ message: "User with that name already exists." })
-    res.end();
+      .end();
     return;
   }
 
   // hash password
   const saltRounds = 10;
-  const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
 
   try {
     // create user in db
@@ -34,19 +33,19 @@ async function createUser(req, res) {
     });
     await user.save();
 
-    res.status(201).json(user);
-    res.end();
+    res.status(201).json(user)
+      .end();
   } catch (error) {
     // mongoose validation error
     if (error._message) {
-      res.status(400);
-      res.end();
+      res.status(400)
+        .end();
       return;
     }
     // other errors
     console.log("create user error", error);
-    res.status(500);
-    res.end();
+    res.status(500)
+      .end();
   }
 }
 

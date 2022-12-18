@@ -6,7 +6,7 @@ async function createBlog(req, res) {
   // title, author, content is provided
   if (!title || !author || !content) {
     res.status(400).json({ message: "All fields are required." })
-    res.end()
+      .end()
     return
   }
 
@@ -21,20 +21,20 @@ async function createBlog(req, res) {
     });
     await blog.save();
 
-    res.status(201).json(blog);
-    res.end();
+    res.status(201).json(blog)
+      .end();
   } catch (error) {
     // mongoose validation error
     if (error._message) {
       console.log(error._message)
-      res.status(400);
-      res.end();
+      res.status(400)
+        .end();
       return;
     }
     // other errors
     console.log("create blog error", error);
-    res.status(500);
-    res.end();
+    res.status(500)
+      .end();
   }
 }
 

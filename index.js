@@ -5,6 +5,7 @@ import "./functions/database.js" // db connection
 // routes
 import users from "./routes/users/index.js"
 import blogs from "./routes/blogs/index.js"
+import auth from "./routes/auth/index.js"
 
 const PORT = process.env.PORT || 3000 // server port
 
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: true })) // parses urlencoded payloads
 // routes
 users(app)
 blogs(app)
+auth(app)
 
 // all undefined routes, return 404
 app.get("*", (req, res) => {
