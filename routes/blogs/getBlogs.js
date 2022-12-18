@@ -2,6 +2,7 @@ import Blog from "../../models/blog.model.js";
 import dotenv from "dotenv";
 dotenv.config();
 
+// add url to blog object
 const addUrlToBlog = (blog) => {
   return { ...blog._doc, url: `${process.env.SITE_URL}/api/v1/blogs/${blog._id}` }
 }
@@ -50,11 +51,17 @@ async function getBlogs(req, res) {
       sortForMongoose = { dislikes: -1 }
     }
 
-    const countBlogs = await Blog.countDocuments().sort(sortForMongoose);
+    const countBlogs = await Blog.countDocuments()
+      .sort(sortForMongoose);
 
     // getting blogs
-    const blogs = await Blog.find().skip(skip).limit(limit).sort(sortForMongoose);
+    const blogs = await Blog.find()
+      .skip(skip)
+      .limit(limit)
+      .sort(sortForMongoose)
+      .populate({ path: "author", select: "-createdAt -password" }) // populate author field with user object + exclude things
     // if no blogs found
+
     if (blogs.length < 1) {
       res.status(404).json({ message: "No blogs found..." })
       return

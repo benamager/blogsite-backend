@@ -17,8 +17,7 @@ async function createBlog(req, res) {
       title: title,
       author: author,
       content: content,
-      likes: 0,
-      dislikes: 0,
+      // likes & dislikes both set to 0 by default in BlogSchema
     });
     await blog.save();
 

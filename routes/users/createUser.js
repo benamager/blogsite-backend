@@ -12,10 +12,10 @@ async function createUser(req, res) {
   }
 
   // username is not used
-  const isUsernameUsed = await User.findOne({ username: req.body.username });
+  const isUsernameUsed = await User.findOne({ username: username });
 
   if (isUsernameUsed) {
-    res.status(403).json({ message: "User with that name already exists" })
+    res.status(403).json({ message: "User with that name already exists." })
     res.end();
     return;
   }
@@ -30,6 +30,7 @@ async function createUser(req, res) {
       createdAt: new Date(),
       username: username,
       password: hashedPassword,
+      // key "role" set to default in UserSchema
     });
     await user.save();
 

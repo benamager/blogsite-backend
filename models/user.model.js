@@ -12,6 +12,11 @@ const UserSchema = new Schema({
     type: String,
     required: [true, "Must provide password"],
   },
+  role: {
+    type: String,
+    enum: ["default", "mod", "admin"], // possible values
+    default: "default", // default value
+  }
 });
 
 const User = model("User", UserSchema);

@@ -1,4 +1,5 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, mongoose } from "mongoose";
+import User from "./user.model.js";
 
 const BlogSchema = new Schema({
   createdAt: {
@@ -9,8 +10,9 @@ const BlogSchema = new Schema({
     required: [true, "Must provide title"],
   },
   author: {
-    type: String,
-    required: [true, "Must provide author"],
+    type: mongoose.Schema.Types.ObjectId,
+    required: [true, "Must provide user id"],
+    ref: 'User', // reference to User model
   },
   content: {
     type: String,
@@ -18,11 +20,11 @@ const BlogSchema = new Schema({
   },
   likes: {
     type: Number,
-    required: [true, "Must provide likes"],
+    default: 0,
   },
   dislikes: {
     type: Number,
-    required: [true, "Must provide dislikes"],
+    default: 0,
   },
 });
 
