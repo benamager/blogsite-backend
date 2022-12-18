@@ -1,21 +1,26 @@
 import Blog from "../../models/blog.model.js";
+import User from "../../models/user.model.js";
 
 async function createBlog(req, res) {
-  const { title, author, content } = req.body
+  const { title, content } = req.body
+  const username = req.username // username is provided by authorization middleware (by token)
 
   // title, author, content is provided
-  if (!title || !author || !content) {
+  if (!title || !content) {
     res.status(400).json({ message: "All fields are required." })
       .end()
     return
   }
 
   try {
+    // find the users id in the database
+    const userIdObject = await User.findOne({ username: username }).select("_id")
+
     // create blog in db
     const blog = new Blog({
       createdAt: new Date(),
       title: title,
-      author: author,
+      author: userIdObject.id,
       content: content,
       // likes & dislikes both set to 0 by default in BlogSchema
     });

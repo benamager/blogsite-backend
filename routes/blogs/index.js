@@ -5,8 +5,8 @@ import authorization from "../../middlewares/authorization.js"
 
 const blogs = (app) => {
   app.route("/api/v1/blogs/:id?") // ? means optional parameter
-    .post(createBlog)
-    .get(authorization, getBlogs)
+    .post(authorization, createBlog)
+    .get(getBlogs)
 }
 
 export default blogs
