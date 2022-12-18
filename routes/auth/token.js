@@ -36,42 +36,22 @@ async function token(req, res) {
 
     // generate new token
     const newToken = jwt.sign({ username: user.username }, tokenSecret, { expiresIn: "1d" })
+    const expiredDate = new Date().getTime() + 86400000
 
     // send new token to client
-    res.status(201).json({ token: newToken, expiredData: new Date().getTime() + 86400000 })
+    res.status(201).json({
+      token: newToken,
+      expiredDate: expiredDate,
+      role: user.role,
+      username: user.username,
+    })
       .end()
   } catch (error) {
     console.log("Authentication token error", error)
     res.status(500).json({ message: "Authentication token error" })
       .end()
   }
-
-
-
-  // try {
-  //   // find the user in the database
-  //   const user = await usersCollection.findOne({ username: req.body.username })
-  //   client.close() // close db
-  //   // if the user doesn't exist
-  //   if (user === null) {
-  //     res.status(403).json({ message: "User doesn't exist." }).end()
-  //     return
-  //   }
-
-  //   // if the password is wrong
-  //   if (!await bcrypt.compare(req.body.password, user.password)) {
-  //     res.status(403).json({ message: "Wrong username or password." }).end()
-  //     return
-  //   }
-
-  //   const newToken = jwt.sign({ username: user.username }, process.env.TOKEN_SECRET, { expiresIn: "1h" })
-
-  //   res.status(201).json({ token: newToken }).end()
-  // } catch (error) {
-  //   console.log("authentication token error", error)
-  //   res.status(500)
-  //   res.end()
-  // }
 }
+
 
 export default token;

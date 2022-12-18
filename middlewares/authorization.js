@@ -7,8 +7,8 @@ const authorization = (req, res, next) => {
   const tokenSecret = process.env.TOKEN_SECRET
 
   // check auth headers exists
-  if (!req.headers.authorization === null) {
-    res.status(401).json({ message: "Not authorized" })
+  if (!req.headers.authorization) {
+    res.status(401).json({ message: "Not authorized." })
       .end()
     return
   }

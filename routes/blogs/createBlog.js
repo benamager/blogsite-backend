@@ -5,7 +5,7 @@ async function createBlog(req, res) {
   const { title, content } = req.body
   const username = req.username // username is provided by authorization middleware (by token)
 
-  // title, author, content is provided
+  // title, content is provided
   if (!title || !content) {
     res.status(400).json({ message: "All fields are required." })
       .end()

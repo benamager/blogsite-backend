@@ -5,6 +5,9 @@ const BlogSchema = new Schema({
   createdAt: {
     type: Date,
   },
+  lastEdit: {
+    type: Date,
+  },
   title: {
     type: String,
     required: [true, "Must provide title"],
