@@ -74,7 +74,7 @@ async function getBlogs(req, res) {
       url: `${process.env.SITE_URL}/api/v1/blogs?limit=${limit}&skip=${skip}&sort=${sort}`,
       next: skip + limit >= countBlogs ? null : `${process.env.SITE_URL}/api/v1/blogs?limit=${limit}&skip=${skip + limit}&sort=${sort}`,
       previous: skip === 0 ? null : `${process.env.SITE_URL}/api/v1/blogs?limit=${limit}&skip=${skip - limit > 0 ? 0 : skip - limit}&sort=${sort}`,
-      blogs: blogs.map(blog => addUrlToBlog(blog)) // blogs
+      results: blogs.map(blog => addUrlToBlog(blog)) // blogs
     })
       .end();
   } catch (error) {
