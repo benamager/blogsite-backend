@@ -60,7 +60,7 @@ async function getBlogs(req, res) {
       .skip(skip)
       .limit(limit)
       .sort(sortForMongoose)
-      .populate({ path: "author", select: "-createdAt -password -_id" }) // populate author field with user object + exclude things
+      .populate({ path: "author", select: "-password -createdAt -email -lastActive -role -__v" }) // populate author field with user object + exclude things
 
     // if no blogs found
     if (blogs.length < 1) {

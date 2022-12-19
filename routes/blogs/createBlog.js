@@ -3,7 +3,7 @@ import User from "../../models/user.model.js";
 
 async function createBlog(req, res) {
   const { title, content } = req.body
-  const username = req.username // username is provided by authorization middleware (by token)
+  const userId = req.userId // username is provided by authorization middleware (by token)
 
   // title, content is provided
   if (!title || !content) {
@@ -13,20 +13,20 @@ async function createBlog(req, res) {
   }
 
   try {
-    // find the users id in the database
-    const userIdObject = await User.findOne({ username: username }).select("_id")
-
     // create blog in db
     const blog = new Blog({
       createdAt: new Date(),
       title: title,
-      author: userIdObject.id,
+      author: userId,
       content: content,
       // likes & dislikes both set to 0 by default in BlogSchema
     });
     await blog.save();
 
-    res.status(201).json(blog)
+    // return new blog with populated author
+    res.status(201).json(
+      await blog.populate({ path: "author", select: "-password -createdAt -email -lastActive -role -__v" })
+    )
       .end();
   } catch (error) {
     // mongoose validation error
@@ -38,7 +38,7 @@ async function createBlog(req, res) {
     }
     // other errors
     console.log("create blog error", error);
-    res.status(500)
+    res.status(500).json({ message: "Internal server error" })
       .end();
   }
 }

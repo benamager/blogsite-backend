@@ -1,22 +1,15 @@
 import Blog from "../../models/blog.model.js";
 import User from "../../models/user.model.js"
 
-const fullAccess = ["admin"]
+const fullAccess = ["admin", "mod"]
 
-async function editBlog(req, res) {
+async function deleteBlog(req, res) {
   const { id } = req.params
   const userId = req.userId
-  const { title, content } = req.body
 
   // no id provided
-  if (!id) res.status(400).json({ message: "Blog id is required." }).end()
-
-  // no title & content is provided
-  if (!title || !content) {
-    res.status(400).json({ message: "All fields are required." })
-      .end()
-    return
-  }
+  if (!id) res.status(400).json({ message: "Blog id is required." })
+    .end()
 
   try {
     // find blog & user
@@ -41,20 +34,12 @@ async function editBlog(req, res) {
     }
 
     // update blog
-    const updatedBlog = await Blog.findOneAndUpdate(
+    const deletedBlog = await Blog.findByIdAndDelete(
       { _id: id },
-      {
-        $set: {
-          title: title,
-          content: content,
-          lastEdit: new Date() // add edit date
-        }
-      },
-      { new: true } // returns updated object
     )
 
     // return edited blog with populated author
-    res.status(201).json(
+    res.status(200).json(
       await blog.populate({ path: "author", select: "-password -createdAt -email -lastActive -role -__v" })
     )
       .end();
@@ -68,4 +53,4 @@ async function editBlog(req, res) {
   }
 }
 
-export default editBlog
+export default deleteBlog
