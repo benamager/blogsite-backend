@@ -30,8 +30,8 @@ const authorization = (req, res, next) => {
 
   // check if valid
   try {
-    const username = jwt.verify(token, tokenSecret).username // verify token
-    req.username = username // add username to req, so it can be used in the next middleware
+    const userId = jwt.verify(token, tokenSecret).userId // verify token
+    req.userId = userId // add username to req, so it can be used in the next middleware
     next()
   } catch (error) {
     // invalid token

@@ -5,7 +5,7 @@ const fullAccess = ["admin"]
 
 async function editBlog(req, res) {
   const { id } = req.params
-  const username = req.username
+  const userId = req.userId
   const { title, content } = req.body
 
   // no id provided
@@ -21,7 +21,7 @@ async function editBlog(req, res) {
   try {
     // find blog & user
     const blog = await Blog.findById(id);
-    const user = await User.findOne({ username: username }).select("-createdAt -password") // find user by token => username
+    const user = await User.findById(userId).select("-createdAt -password") // find user by token => username
 
     // blog doesn't exist
     if (!blog) {

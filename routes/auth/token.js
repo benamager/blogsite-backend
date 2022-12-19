@@ -35,7 +35,7 @@ async function token(req, res) {
     }
 
     // generate new token
-    const newToken = jwt.sign({ username: user.username }, tokenSecret, { expiresIn: "1d" })
+    const newToken = jwt.sign({ userId: user._id }, tokenSecret, { expiresIn: "1d" })
     const expiredDate = new Date().getTime() + 86400000
 
     // send new token to client
