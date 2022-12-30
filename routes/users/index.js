@@ -9,7 +9,7 @@ import upload from "../../middlewares/upload.js"
 const users = (app) => {
   app.route("/api/v1/users/:id?") // ? means optional parameter
     .post(upload.single("image"), createUser)
-    .patch(authorization, editUser)
+    .patch(authorization, upload.single("image"), editUser)
     .get(authorization, getUsers)
     .delete(authorization, deleteUser)
 }

@@ -1,11 +1,13 @@
 import User from "../../models/user.model.js"
+import deleteImage from "../../functions/deleteImage.js"
 
 const fullAccess = ["admin"]
 
-async function editBlog(req, res) {
+async function editUser(req, res) {
   const { id } = req.params
   const userId = req.userId
   const { displayName, email, role } = req.body
+  const fileObject = req.file;
 
   // no id provided
   if (!id) res.status(400).json({ message: "User id is required." })
@@ -39,6 +41,13 @@ async function editBlog(req, res) {
       }
     }
 
+    // delete old image if exists
+    if (fileObject && userEditing.image) {
+      // delete old image
+      const oldImagePath = userEditing.image.path
+      await deleteImage(oldImagePath)
+    }
+
     // update user
     const updatedUser = await User.findOneAndUpdate(
       { _id: id },
@@ -47,6 +56,7 @@ async function editBlog(req, res) {
           displayName: displayName,
           email: email,
           role: role,
+          image: fileObject ? fileObject : null,
           lastModified: new Date() // add modified date
         }
       },
@@ -66,4 +76,4 @@ async function editBlog(req, res) {
   }
 }
 
-export default editBlog
+export default editUser
