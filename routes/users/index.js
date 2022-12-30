@@ -4,10 +4,11 @@ import getUsers from "./getUsers.js"
 import deleteUser from "./deleteUser.js"
 
 import authorization from "../../middlewares/authorization.js"
+import upload from "../../middlewares/upload.js"
 
 const users = (app) => {
   app.route("/api/v1/users/:id?") // ? means optional parameter
-    .post(createUser)
+    .post(upload.single("image"), createUser)
     .patch(authorization, editUser)
     .get(authorization, getUsers)
     .delete(authorization, deleteUser)

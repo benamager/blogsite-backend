@@ -25,6 +25,11 @@ const UserSchema = new Schema({
     enum: ["default", "mod", "admin"], // possible values
     default: "default", // default value
   },
+  image: {
+    type: Object,
+    default: null,
+    required: false
+  },
   lastActive: {
     type: Date,
   }

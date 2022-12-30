@@ -5,6 +5,7 @@ const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]
 
 async function createUser(req, res) {
   const { username, password, displayName, email } = req.body;
+  const fileObject = req.file;
 
   // user, pass, email & displayName isn't provided
   if (!username || !password || !displayName || !email) {
@@ -42,6 +43,7 @@ async function createUser(req, res) {
       displayName: displayName,
       email: email,
       password: hashedPassword,
+      image: fileObject ? fileObject : null,
       lastActive: new Date(),
       // key "role" set to default in UserSchema
     });
