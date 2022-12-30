@@ -1,4 +1,5 @@
 import User from "../../models/user.model.js"
+import deleteImage from "../../functions/deleteImage.js"
 
 const fullAccess = ["admin"]
 
@@ -24,6 +25,7 @@ async function deleteUser(req, res) {
 
   try {
     const user = await User.findById(id) // find user from userId in params
+    console.log(user)
 
     // user doesn't exist
     if (!user) {
@@ -34,8 +36,13 @@ async function deleteUser(req, res) {
 
     // delete user
     await User.findByIdAndDelete(id)
+    // delete user image if exists
+    if (userAccessing.image !== null) {
+      const oldImagePath = userAccessing.image.path
+      await deleteImage(oldImagePath)
+    }
 
-    // return deleted user
+    // return success message
     res.status(200).json({ message: "User successfully deleted." })
       .end()
   } catch (error) {
