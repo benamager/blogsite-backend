@@ -31,6 +31,13 @@ async function editUser(req, res) {
       return
     }
 
+    // if client without fullAccess tries to change role
+    if (role && !fullAccess.includes(userAccessing.role)) {
+      res.status(403).json({ message: "You are not permitted to change user role." })
+        .end()
+      return
+    }
+
     // if user isn't user
     if (userId !== userEditing._id.toString()) {
       // if user role isn't included in fullAccess
