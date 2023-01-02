@@ -3,7 +3,7 @@ import User from "../../models/user.model.js";
 
 async function createBlog(req, res) {
   const { title, content } = req.body
-  const userId = req.userId // username is provided by authorization middleware (by token)
+  const userId = req.userId // userId is provided by authorization middleware (via token)
 
   // title, content is provided
   if (!title || !content) {
@@ -32,7 +32,7 @@ async function createBlog(req, res) {
     // mongoose validation error
     if (error._message) {
       console.log(error._message)
-      res.status(400)
+      res.status(500).json({ message: "Internal server error" })
         .end();
       return;
     }
